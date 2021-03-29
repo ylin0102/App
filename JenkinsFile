@@ -41,7 +41,7 @@ pipeline {
         stage('Publish') {
             steps {
                 withDockerRegistry(credentialsId: "${DOCKER_CREDENTIAL}", url: '') {
-                    sh "docker push lyn0102/app:0.0.1"
+                    sh "docker push lyn0102/app:sprint0"
                     echo "Publish Image successfully"
                 }
             }
