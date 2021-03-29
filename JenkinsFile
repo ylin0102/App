@@ -24,10 +24,18 @@ pipeline {
                 echo 'Check out successfully!'
             }
         }
-        stage('Build') {
+        stage('Build && Sonar Analysis') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean install sonar:sonar -Dsonar.host.url=http://88.198.25.89:9000/ -Dsonar.projectKey=App -Dsonar.login=3c5411ed4af036adeaae7b309ce456fdff95b2de'
                 echo "Build successfully!"
+            }
+        }
+        stage("Quality Gate"){
+            timeout(time: 1, unit: 'HOURS') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
             }
         }
         stage('Containerization') {
