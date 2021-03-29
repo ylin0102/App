@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_CREDENTIAL = 'lyn_git'
+        DOCKER_CREDENTIAL = 'lyn_docker'
+    }
+
+    tools {
+        maven 'Maven 3.0'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout(
+                        [$class                           : 'GitSCM',
+                         branches                         : [[name: '*/master']],
+                         doGenerateSubmoduleConfigurations: false,
+                         extensions                       : [],
+                         submoduleCfg                     : [],
+                         userRemoteConfigs                : [[credentialsId: "${GIT_CREDENTIAL}", url: 'https://github.com/ylin0102/App.git']]
+                        ])
+                echo 'Check out successfully!'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+                echo "Build successfully!"
+                script {
+                    IMAGE = readMavenPom().getArtifactId()
+                    VERSION = readMavenPom().getVersion()
+                }
+            }
+        }
+        stage('Containerization') {
+            steps {
+                //sh 'ls'
+                sh 'mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)'
+                sh 'docker build -t lyn0102/app:${VERSION} .'
+                echo "Docker Image Built successfully"
+            }
+        }
+        stage('Publish') {
+            steps {
+                withDockerRegistry(credentialsId: "${DOCKER_CREDENTIAL}", url: '') {
+                    sh "docker push lyn0102/app:${VERSION}"
+                    echo "Publish Image ${IMAGE}:${VERSION} successfully"
+                }
+            }
+        }
+    }
+}
