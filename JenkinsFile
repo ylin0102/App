@@ -58,4 +58,11 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            echo 'I have finished my job'
+            deleteDir()
+        }
+    }
 }
