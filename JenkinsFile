@@ -34,7 +34,7 @@ pipeline {
             steps {
                 //sh 'ls'
                 sh 'mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)'
-                sh 'docker build -t lyn0102/app:0.0.1 .'
+                sh 'docker build -t lyn0102/app:sprint0 .'
                 echo "Docker Image Built successfully"
             }
         }
