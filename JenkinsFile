@@ -28,25 +28,21 @@ pipeline {
             steps {
                 sh 'mvn clean install'
                 echo "Build successfully!"
-                script {
-                    IMAGE = readMavenPom().getArtifactId()
-                    VERSION = readMavenPom().getVersion()
-                }
             }
         }
         stage('Containerization') {
             steps {
                 //sh 'ls'
                 sh 'mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)'
-                sh 'docker build -t lyn0102/app:${VERSION} .'
+                sh 'docker build -t lyn0102/app:0.0.1 .'
                 echo "Docker Image Built successfully"
             }
         }
         stage('Publish') {
             steps {
                 withDockerRegistry(credentialsId: "${DOCKER_CREDENTIAL}", url: '') {
-                    sh "docker push lyn0102/app:${VERSION}"
-                    echo "Publish Image ${IMAGE}:${VERSION} successfully"
+                    sh "docker push lyn0102/app:0.0.1"
+                    echo "Publish Image successfully"
                 }
             }
         }
