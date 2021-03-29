@@ -26,8 +26,10 @@ pipeline {
         }
         stage('Build && Sonar Analysis') {
             steps {
-                sh 'mvn clean install sonar:sonar -Dsonar.host.url=http://88.198.25.89:9000/ -Dsonar.projectKey=App -Dsonar.login=3c5411ed4af036adeaae7b309ce456fdff95b2de'
-                echo "Build successfully!"
+                withSonarQubeEnv('DevSonar') {
+                    sh 'mvn clean install sonar:sonar -Dsonar.host.url=http://88.198.25.89:9000/ -Dsonar.projectKey=App -Dsonar.login=3c5411ed4af036adeaae7b309ce456fdff95b2de'
+                    echo "Build successfully!"
+                }
             }
         }
         stage("Quality Gate"){
