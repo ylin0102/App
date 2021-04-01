@@ -10,6 +10,6 @@ public class TestController {
 
     @GetMapping("test")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Hello world! Hey");
+        return ResponseEntity.ok("Hello world!");
     }
 }
