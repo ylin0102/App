@@ -15,6 +15,7 @@
         <div class="form-container sign-up-container">
             <form action="#" th:action="@{/signup}" th:object="${registerUser}" method="post">
                 <h1>Create Account</h1>
+                <span th:if="${userExistedError != null}" th:text="${userExistedError}" class="text-danger"></span>
                 <div class="form-group">
                     <label for="name"></label>
                     <input type="text" th:field="*{username}" id="name" placeholder="username"/>
@@ -46,6 +47,8 @@
         <div class="form-container sign-in-container">
             <form action="#" th:action="@{/signin}" th:object="${loginUser}" method="post">
                 <h1>Sign in</h1>
+                <span th:if="${registered != null}" th:text="${registered}"></span>
+                <span th:if="${userValidationError != null}" th:text="${userValidationError}" class="text-danger"></span>
                 <div class="form-group">
                     <label for="username"></label>
                     <input type="text" th:field="*{username}" id="username" placeholder="username"/>

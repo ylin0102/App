@@ -71,6 +71,8 @@ public class HomeController {
 
         try {
             userService.addUser(registerUser);
+            model.addAttribute("leftActive", true);
+            model.addAttribute("registered", "Sign Up successfully. Please login");
         } catch (UserExistedException e) {
             log.error(e.getMessage());
             model.addAttribute("userExistedError", e.getMessage());
