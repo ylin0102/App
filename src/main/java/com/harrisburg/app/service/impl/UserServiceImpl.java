@@ -1,22 +1,29 @@
 package com.harrisburg.app.service.impl;
 
+import com.harrisburg.app.domain.User;
+import com.harrisburg.app.entity.ContactRelation;
 import com.harrisburg.app.entity.UserInfo;
 import com.harrisburg.app.exception.InvalidUserCredentialException;
 import com.harrisburg.app.exception.UserExistedException;
+import com.harrisburg.app.exception.UserNotFoundException;
+import com.harrisburg.app.repository.ContactRelationRepository;
 import com.harrisburg.app.repository.UserInfoRepository;
 import com.harrisburg.app.service.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserInfoRepository userInfoRepository;
+    private final ContactRelationRepository contactRelationRepository;
 
-    public UserServiceImpl(UserInfoRepository userInfoRepository) {
+    public UserServiceImpl(UserInfoRepository userInfoRepository, ContactRelationRepository contactRelationRepository) {
         this.userInfoRepository = userInfoRepository;
+        this.contactRelationRepository = contactRelationRepository;
     }
 
     @Override
@@ -41,4 +48,33 @@ public class UserServiceImpl implements UserService {
 
         return existedUser.get();
     }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userInfoRepository.findByUsername(username)
+                .map(userInfo -> User.builder()
+                        .id(userInfo.getId())
+                        .username(username)
+                        .firstName(userInfo.getFirstname())
+                        .lastName(userInfo.getLastname())
+                        .build())
+                .orElseThrow(() -> new UserNotFoundException("No User Find"));
+    }
+
+    @Override
+    public List<User> getAllContactByUserId(Integer userId) {
+        List<ContactRelation> contactRelationList = contactRelationRepository.findByUserId(userId);
+
+        return contactRelationList.stream()
+                .map(contactRelation -> userInfoRepository.getOne(contactRelation.getId()))
+                .map(userInfo -> User.builder()
+                        .id(userInfo.getId())
+                        .username(userInfo.getUsername())
+                        .firstName(userInfo.getFirstname())
+                        .lastName(userInfo.getLastname())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
 }

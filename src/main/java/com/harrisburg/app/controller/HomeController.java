@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -48,6 +47,7 @@ public class HomeController {
         try {
             UserInfo existedUser = userService.validateUser(loginUser);
             session.setAttribute("userId", existedUser.getId());
+            session.setAttribute("username", existedUser.getUsername());
             session.setAttribute("firstname", existedUser.getFirstname());
             session.setAttribute("lastname", existedUser.getLastname());
         } catch (InvalidUserCredentialException e) {
