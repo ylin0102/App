@@ -45,14 +45,14 @@ pipeline {
             steps {
                 //sh 'ls'
                 sh 'mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)'
-                sh 'docker build -t lyn0102/app:sprint1 .'
+                sh 'docker build -t lyn0102/app:sprint2 .'
                 echo "Docker Image Built successfully"
             }
         }
         stage('Publish') {
             steps {
                 withDockerRegistry(credentialsId: "${DOCKER_CREDENTIAL}", url: '') {
-                    sh "docker push lyn0102/app:sprint1"
+                    sh "docker push lyn0102/app:sprint2"
                     echo "Publish Image successfully"
                 }
             }
