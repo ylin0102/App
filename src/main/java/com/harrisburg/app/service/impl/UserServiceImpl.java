@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         List<ContactRelation> contactRelationList = contactRelationRepository.findByUserId(userId);
 
         return contactRelationList.stream()
-                .map(contactRelation -> userInfoRepository.getOne(contactRelation.getId()))
+                .map(contactRelation -> userInfoRepository.getOne(contactRelation.getContactId()))
                 .map(userInfo -> User.builder()
                         .id(userInfo.getId())
                         .username(userInfo.getUsername())
@@ -74,6 +74,28 @@ public class UserServiceImpl implements UserService {
                         .lastName(userInfo.getLastname())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ContactRelation addContact(Integer userId, Integer currentUserId) {
+        ContactRelation contactRelation = ContactRelation.builder()
+                .userId(currentUserId)
+                .contactId(userId)
+                .build();
+
+        //Two directional user-contact relationship
+        contactRelationRepository.save(ContactRelation.builder()
+                .userId(userId)
+                .contactId(currentUserId)
+                .build()
+        );
+
+        return contactRelationRepository.save(contactRelation);
+    }
+
+    @Override
+    public Boolean isOldFriend(Integer userId, Integer contactId) {
+        return contactRelationRepository.findByUserIdAndContactId(userId, contactId).isPresent();
     }
 
 

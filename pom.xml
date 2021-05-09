@@ -19,7 +19,10 @@
             com/harrisburg/app/repository/**/*,
             com/harrisburg/app/AppApplication.*,
             com/harrisburg/app/entity/**/*,
-            com/harrisburg/app/exception/**/*
+            com/harrisburg/app/exception/**/*,
+            com/harrisburg/app/domain/**/*,
+            com/harrisburg/app/filter/**/*,
+            com/harrisburg/app/config/**/*
         </sonar.coverage.exclusions>
     </properties>
     <dependencies>
@@ -118,6 +121,9 @@
                                 <exclude>com/harrisburg/app/AppApplication.*</exclude>
                                 <exclude>com/harrisburg/app/entity/**/*</exclude>
                                 <exclude>com/harrisburg/app/exception/**/*</exclude>
+                                <exclude>com/harrisburg/app/domain/**/*</exclude>
+                                <exclude>com/harrisburg/app/filter/**/*</exclude>
+                                <exclude>com/harrisburg/app/config/**/*</exclude>
                             </excludes>
                         </configuration>
                         <executions>
@@ -146,12 +152,12 @@
                                                 <limit>
                                                     <counter>LINE</counter>
                                                     <value>COVEREDRATIO</value>
-                                                    <minimum>20%</minimum>
+                                                    <minimum>80%</minimum>
                                                 </limit>
                                                 <limit>
                                                     <counter>BRANCH</counter>
                                                     <value>COVEREDRATIO</value>
-                                                    <minimum>20%</minimum>
+                                                    <minimum>80%</minimum>
                                                 </limit>
                                             </limits>
                                         </rule>

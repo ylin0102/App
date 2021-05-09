@@ -19,9 +19,9 @@ public class MessageKey {
 
     @PrimaryKeyColumn(name = "thread_id", type = PrimaryKeyType.PARTITIONED)
     @CassandraType(type = CassandraType.Name.UUID)
-    private UUID thread_id;
+    private UUID threadId;
 
     @PrimaryKeyColumn(name = "message_id", ordinal = 0, ordering = Ordering.DESCENDING)
     @CassandraType(type = CassandraType.Name.TIMEUUID)
-    private UUID message_id;
+    private UUID messageId;
 }
